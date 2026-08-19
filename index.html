@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#050a13" />
+  <meta name="description" content="HAWKUY — ночной профиль" />
+  <title>HAWKUY — Night Profile</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Russo+One&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root { --void:#050a13; --panel:rgba(8,18,33,.82); --moon:#eff7ff; --mist:#9ab6d2; --blue:#82c6ff; --line:rgba(151,203,247,.22); }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    html { min-width:320px; scroll-behavior:smooth; background:var(--void); }
+    body { min-height:100vh; overflow-x:hidden; background:var(--void); color:var(--moon); font-family:"Manrope",sans-serif; }
+    body.locked { height:100vh; overflow:hidden; }
+    a, button { -webkit-tap-highlight-color:transparent; }
+    a:focus-visible, button:focus-visible { outline:2px solid var(--blue); outline-offset:4px; }
+
+    /* Night katana scene */
+    .night-scene { position:fixed; z-index:-3; inset:0; overflow:hidden; background:var(--void); }
+    .night-scene__image { position:absolute; inset:0; background:url("./media/hawkuy-katana-night-sky.jpg") 72% center / cover no-repeat; filter:saturate(.76) contrast(1.1) brightness(.75); animation:sky-breathe 16s ease-in-out infinite alternate; }
+    .night-scene__shade { position:absolute; inset:0; background:linear-gradient(90deg,rgba(5,10,19,.92),rgba(5,10,19,.69) 38%,rgba(5,10,19,.22) 78%),linear-gradient(0deg,rgba(5,10,19,.82),transparent 61%); }
+    .stars, .particles { position:absolute; inset:0; pointer-events:none; }
+    .star { position:absolute; border-radius:50%; background:#f0f8ff; box-shadow:0 0 8px rgba(172,222,255,.86); animation:star-pulse 3.4s ease-in-out infinite alternate; }
+    .particle { position:absolute; top:-4vh; border-radius:50%; background:rgba(194,229,255,.75); box-shadow:0 0 9px rgba(122,194,255,.75); animation:particle-drop linear infinite; }
+    .moon-orbit { position:absolute; right:-14vw; top:-20vw; width:52vw; height:52vw; border:1px solid rgba(162,214,255,.17); border-radius:50%; box-shadow:0 0 0 48px rgba(162,214,255,.025),0 0 0 96px rgba(162,214,255,.018),inset 0 0 90px rgba(162,214,255,.07); }
+    .katana-label { position:absolute; right:clamp(16px,4vw,65px); bottom:clamp(29px,6vw,68px); writing-mode:vertical-rl; color:rgba(206,235,255,.45); font-size:8px; font-weight:800; letter-spacing:.18em; }
+    @keyframes sky-breathe { to { transform:scale(1.035); } }
+    @keyframes star-pulse { to { opacity:.24; transform:scale(.55); } }
+    @keyframes particle-drop { 0%{transform:translate3d(0,-7vh,0);opacity:0} 10%{opacity:.65} 100%{transform:translate3d(28px,110vh,0);opacity:0} }
+
+    /* Entry and audio */
+    .entry-gate { position:fixed; z-index:90; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:13px; padding:26px; background:radial-gradient(circle at 50% 38%,rgba(78,145,212,.19),rgba(5,10,19,.94) 59%); text-align:center; transition:opacity .55s ease,transform .55s ease,visibility .55s ease; }
+    .entry-gate.leaving { opacity:0; transform:scale(1.04); visibility:hidden; }
+    .gate-kanji { display:grid; place-items:center; width:104px; height:104px; margin-bottom:5px; border:1px solid rgba(166,216,255,.57); border-radius:50%; color:var(--moon); font:55px/1 serif; box-shadow:inset 0 0 0 9px rgba(137,199,255,.06),0 0 42px rgba(102,186,255,.25); animation:gate-float 4.8s ease-in-out infinite; }
+    .entry-gate h1 { font:600 clamp(25px,5vw,39px)/1.1 "Unbounded",sans-serif; letter-spacing:.04em; }
+    .gate-question { margin-top:9px; font-size:17px; font-weight:700; }.gate-sub { max-width:360px; color:var(--mist); font-size:12px; line-height:1.7; }
+    .enter-btn { display:inline-flex; align-items:center; gap:9px; margin-top:8px; padding:14px 25px; border:1px solid rgba(160,213,255,.62); border-radius:999px; background:rgba(126,197,255,.12); color:var(--moon); font:800 12px "Manrope",sans-serif; letter-spacing:.1em; cursor:pointer; transition:transform .2s ease,background .2s ease; }
+    .enter-btn:hover { transform:translateY(-2px); background:rgba(126,197,255,.25); }
+    .music-toggle { position:fixed; z-index:20; left:20px; bottom:20px; display:none; place-items:center; width:50px; height:50px; border:1px solid var(--line); border-radius:50%; background:rgba(7,16,29,.78); color:var(--blue); backdrop-filter:blur(12px); cursor:pointer; }
+    .music-toggle.show { display:grid; }.music-toggle.playing { border-color:rgba(156,215,255,.83); box-shadow:0 0 25px rgba(108,190,255,.28); }
+    .equalizer { position:absolute; bottom:7px; display:flex; gap:2px; align-items:flex-end; height:8px; }.equalizer i { width:2px; height:3px; border-radius:2px; background:var(--blue); }.equalizer i:nth-child(2){height:6px}.equalizer i:nth-child(3){height:4px}
+    .music-toggle.playing .equalizer i { animation:eq .74s ease-in-out infinite alternate; }.music-toggle.playing .equalizer i:nth-child(2){animation-delay:-.24s}.music-toggle.playing .equalizer i:nth-child(3){animation-delay:-.43s}
+    @keyframes gate-float { 50% { transform:translateY(-8px); } } @keyframes eq { to { transform:scaleY(1.7); } }
+
+    /* Moon cursor */
+    .moon-cursor { position:fixed; z-index:60; top:0; left:0; width:26px; height:26px; opacity:0; pointer-events:none; transition:opacity .25s ease; mix-blend-mode:screen; }
+    .moon-cursor.visible { opacity:1; }.moon-cursor::before { content:""; position:absolute; inset:0; border:1px solid rgba(190,230,255,.95); border-radius:50%; box-shadow:0 0 15px rgba(121,200,255,.8),0 0 35px rgba(83,153,255,.3); }.moon-cursor i { position:absolute; inset:8px; border-radius:50%; background:#dff4ff; box-shadow:0 0 11px #a8e1ff; }.moon-cursor span { position:absolute; top:12px; right:100%; width:61px; height:1px; background:linear-gradient(90deg,transparent,rgba(146,213,255,.67)); }
+
+    /* Original profile structure */
+    .wrap { position:relative; z-index:2; width:min(960px,calc(100% - 40px)); margin:0 auto; padding:40px 0; display:grid; grid-template-columns:320px 1fr; gap:24px; align-items:start; }
+    .profile-card, .section, .spam { border:1px solid var(--line); background:linear-gradient(145deg,rgba(13,28,48,.84),rgba(7,16,29,.73)); backdrop-filter:blur(18px); box-shadow:0 18px 60px rgba(0,0,0,.25); }
+    .profile-card, .section { position:relative; }.profile-card::before,.section::before,.profile-card::after,.section::after { content:""; position:absolute; width:17px; height:17px; pointer-events:none; }.profile-card::before,.section::before { top:-1px; left:-1px; border-top:1px solid rgba(172,223,255,.8); border-left:1px solid rgba(172,223,255,.8); }.profile-card::after,.section::after { right:-1px; bottom:-1px; border-right:1px solid rgba(172,223,255,.8); border-bottom:1px solid rgba(172,223,255,.8); }
+    .profile-card { position:sticky; top:40px; display:flex; flex-direction:column; align-items:center; padding:35px 27px 27px; border-radius:21px; }
+    .avatar-orbit { position:relative; display:grid; place-items:center; width:140px; height:140px; margin-bottom:20px; border:1px solid rgba(153,211,255,.31); border-radius:50%; box-shadow:0 0 0 10px rgba(124,194,255,.035),0 0 35px rgba(108,181,255,.13); }
+    .avatar-orbit::before,.avatar-orbit::after { content:""; position:absolute; border-radius:50%; }.avatar-orbit::before { inset:-7px; border:1px solid rgba(158,216,255,.62); border-right-color:transparent; animation:orbit 5s linear infinite; }.avatar-orbit::after { inset:-18px; border:1px solid rgba(158,216,255,.18); border-left-color:transparent; animation:orbit 8s linear infinite reverse; }.avatar-kanji { font:60px/1 serif; color:var(--moon); text-shadow:0 0 24px rgba(108,181,255,.36); } @keyframes orbit { to { transform:rotate(360deg); } }
+    .profile-card h1 { font:600 28px/1 "Unbounded",sans-serif; letter-spacing:.07em; }.status { display:inline-flex; align-items:center; gap:7px; margin-top:14px; padding:7px 13px; border:1px solid rgba(148,211,255,.24); border-radius:999px; color:var(--blue); font-size:8px; font-weight:800; letter-spacing:.16em; }.status i { width:5px; height:5px; border-radius:50%; background:var(--blue); box-shadow:0 0 8px var(--blue); }.line { width:100%; height:1px; margin:22px 0; background:linear-gradient(90deg,transparent,rgba(151,209,255,.38),transparent); }
+    .facts { display:grid; grid-template-columns:1fr 1fr; gap:8px; width:100%; }.fact { padding:12px 8px; border:1px solid rgba(148,211,255,.11); border-radius:10px; background:rgba(148,211,255,.035); text-align:center; }.fact strong { display:block; font-size:12px; }.fact span { display:block; margin-top:4px; color:var(--mist); font-size:7px; font-weight:800; letter-spacing:.1em; }.bio { width:100%; margin:18px 0; color:var(--mist); font-size:12px; line-height:1.6; text-align:center; }.bio b { color:var(--blue); }
+    .profile-link { display:flex; align-items:center; justify-content:center; gap:9px; width:100%; padding:13px; border:1px solid rgba(126,196,255,.38); border-radius:11px; background:rgba(112,183,255,.08); color:#bde5ff; text-decoration:none; font-size:13px; font-weight:700; transition:background .2s ease,transform .2s ease; }.profile-link:hover { background:rgba(112,183,255,.18); transform:translateY(-2px); }.profile-link .out { margin-left:auto; }
+    .content { display:flex; flex-direction:column; gap:16px; }.section { padding:25px; border-radius:17px; opacity:0; transform:translateY(20px); animation:section-in .7s cubic-bezier(.23,1,.32,1) forwards; }.section:nth-child(2){animation-delay:.08s}.section:nth-child(3){animation-delay:.16s}.section-title { display:flex; align-items:center; gap:10px; margin-bottom:17px; color:var(--blue); font:13px "Russo One",sans-serif; letter-spacing:.12em; }.section-title::after { content:""; flex:1; height:1px; background:linear-gradient(90deg,rgba(137,201,255,.4),transparent); }.two { display:grid; grid-template-columns:1fr 1fr; gap:10px; }.stack { display:grid; gap:10px; }
+    .item { position:relative; display:flex; align-items:center; gap:13px; padding:15px 16px; overflow:hidden; border:1px solid rgba(148,211,255,.16); border-radius:12px; background:rgba(148,211,255,.035); color:var(--moon); text-decoration:none; transition:border-color .2s ease,background .2s ease,transform .2s ease; }.item::before { content:""; position:absolute; inset:0; background:linear-gradient(90deg,transparent,rgba(145,210,255,.11),transparent); transform:translateX(-110%); transition:transform .5s ease; }.item:hover::before { transform:translateX(110%); }.item:hover { border-color:rgba(148,211,255,.54); background:rgba(148,211,255,.08); transform:translateY(-2px); }.item-icon { color:var(--blue); font-size:18px; }.item-copy { flex:1; }.item b { display:block; font-size:13px; }.item small { display:block; margin-top:3px; color:var(--mist); font-size:10px; }.out { color:var(--blue); font-size:18px; }
+    .notice { display:flex; align-items:flex-start; gap:12px; padding:15px 17px; border:1px solid rgba(151,203,247,.2); border-radius:13px; background:rgba(89,143,195,.08); color:var(--mist); font-size:12px; line-height:1.6; }.notice .tick { flex:none; color:var(--blue); }.notice b { color:var(--moon); }
+    .spam { padding:23px; border-radius:17px; text-align:center; }.spam h2 { margin:8px 0 5px; color:var(--blue); font:13px "Russo One",sans-serif; letter-spacing:.14em; }.spam p { margin-bottom:15px; color:var(--mist); font-size:12px; }.spam-links { display:flex; justify-content:center; gap:9px; flex-wrap:wrap; }.spam-links a { display:inline-flex; align-items:center; gap:7px; padding:11px 14px; border:1px solid rgba(148,211,255,.21); border-radius:10px; background:rgba(148,211,255,.04); color:var(--moon); text-decoration:none; font-size:12px; font-weight:700; }.spam-links a:hover { border-color:rgba(148,211,255,.55); background:rgba(148,211,255,.1); }.footer { padding:8px; color:rgba(202,230,250,.4); font-size:8px; font-weight:800; letter-spacing:.18em; text-align:center; }
+    @keyframes section-in { to { opacity:1; transform:translateY(0); } }
+    @media (max-width:768px) { .wrap { width:calc(100% - 28px); grid-template-columns:1fr; padding:22px 0 70px; }.profile-card { position:relative; top:auto; padding:28px 20px; border-radius:18px; }.avatar-orbit { width:112px; height:112px; margin-bottom:16px; }.avatar-kanji{font-size:48px}.profile-card h1{font-size:23px}.section{padding:20px;border-radius:15px}.two{grid-template-columns:1fr}.item{padding:14px}.music-toggle{left:14px;bottom:14px;width:46px;height:46px}.moon-cursor{display:none}.moon-orbit{width:90vw;height:90vw;right:-30vw;top:-15vw}.night-scene__image{background-position:67% center}.night-scene__shade{background:linear-gradient(0deg,rgba(5,10,19,.87),rgba(5,10,19,.43) 68%),linear-gradient(90deg,rgba(5,10,19,.78),rgba(5,10,19,.22))}.katana-label{right:13px;bottom:65px;font-size:7px}.entry-gate h1{font-size:26px}.gate-question{font-size:16px} }
+    @media (prefers-reduced-motion:reduce) { *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.stars,.particles{display:none!important} }
+  </style>
+</head>
+<body class="locked">
+  <audio id="bgMusic" loop preload="metadata"><source src="./media/hawkuy-night-track.mp3" type="audio/mpeg" /></audio>
+  <div class="night-scene" aria-hidden="true"><div class="night-scene__image"></div><div class="night-scene__shade"></div><div class="stars" id="stars"></div><div class="particles" id="particles"></div><div class="moon-orbit"></div><div class="katana-label">KATANA / NIGHT SKY / HAWKUY</div></div>
+  <section class="entry-gate" id="gate"><div class="gate-kanji">鷹</div><h1>HAWKUY</h1><p class="gate-question">Вы готовы зайти на сайт?</p><p class="gate-sub">При входе включится музыка — её можно выключить в любой момент кнопкой в углу экрана</p><button class="enter-btn" id="enterBtn" type="button">♬ Да, войти</button></section>
+  <button class="music-toggle" id="musicToggle" type="button" aria-pressed="true" title="Выключить музыку">♪<span class="equalizer"><i></i><i></i><i></i></span></button>
+  <div class="moon-cursor" id="cursor" aria-hidden="true"><i></i><span></span></div>
+
+  <main class="wrap">
+    <aside class="profile-card">
+      <div class="avatar-orbit"><div class="avatar-kanji">鷹</div></div><h1>HAWKUY</h1><div class="status"><i></i> ГАРАНТ</div><div class="line"></div>
+      <div class="facts"><div class="fact"><strong>Денис</strong><span>ИМЯ</span></div><div class="fact"><strong>15 y.o</strong><span>ВОЗРАСТ</span></div><div class="fact"><strong>20 дек</strong><span>ДЕНЬ РОЖДЕНИЯ</span></div><div class="fact"><strong>Python</strong><span>СТЕК</span></div></div>
+      <p class="bio"><b>Кодер</b> — Python + вайбкодинг. Делаю ботов, сервисы и всё что нужно. Крутой и точка.</p>
+      <a class="profile-link" href="https://t.me/hawkuy" target="_blank" rel="noopener">✦ @Hawkuy <span class="out">↗</span></a>
+    </aside>
+    <div class="content">
+      <section class="section"><div class="section-title">РЕПУТАЦИЯ</div><div class="two"><a class="item" href="https://t.me/dehnc2000Proof" target="_blank" rel="noopener"><span class="item-icon">✓</span><span class="item-copy"><b>Пруфы</b><small>@dehnc2000Proof</small></span><span class="out">↗</span></a><a class="item" href="https://t.me/handsHawkuy" target="_blank" rel="noopener"><span class="item-icon">♙</span><span class="item-copy"><b>Ручения</b><small>@handsHawkuy</small></span><span class="out">↗</span></a></div></section>
+      <section class="section"><div class="section-title">МОИ ПРОЕКТЫ</div><div class="stack"><a class="item" href="https://t.me/SharkBalanceBot" target="_blank" rel="noopener"><span class="item-icon">▣</span><span class="item-copy"><b>@SharkBalanceBot</b><small>Магазин цифровых товаров</small></span><span class="out">↗</span></a><a class="item" href="https://t.me/genncalls_bot" target="_blank" rel="noopener"><span class="item-icon">◌</span><span class="item-copy"><b>@genncalls_bot</b><small>Пранк бот</small></span><span class="out">↗</span></a><a class="item" href="https://t.me/gencals_bot" target="_blank" rel="noopener"><span class="item-icon">ϟ</span><span class="item-copy"><b>@gencals_bot</b><small>Пранк + бомбер + анонимки и т.п.</small></span><span class="out">↗</span></a></div></section>
+      <section class="section"><div class="section-title">ТРАСТЫ В БАЗАХ</div><a class="item" href="https://t.me/Impex_Antiscam" target="_blank" rel="noopener"><span class="item-icon">♢</span><span class="item-copy"><b>@Impex_Antiscam</b><small>Траст в базе</small></span><span class="out">↗</span></a></section>
+      <div class="notice"><span class="tick">✓</span><span><b>ГАСД:</b> Занесён без доквы. Писал апелляцию — проигнорировали.</span></div>
+      <section class="spam"><div>✦</div><h2>СПАМ-БАН?</h2><p>Пишите в сообщения каналу или используйте бота</p><div class="spam-links"><a href="https://t.me/hawkuy" target="_blank" rel="noopener">◌ Написать</a><a href="https://t.me/Spikespam_bot" target="_blank" rel="noopener">▣ @Spikespam_bot</a></div></section>
+      <footer class="footer">鷹 HAWKUY © 2025</footer>
+    </div>
+  </main>
+  <script>
+    const stars = document.getElementById('stars');
+    for (let i=0;i<64;i++){ const s=document.createElement('i'); const z=1+(i%3); s.style.cssText=`left:${(i*29)%101}%;top:${(i*17)%61}%;width:${z}px;height:${z}px;animation-delay:${(i%10)*-.43}s`; stars.appendChild(s); }
+    const particles = document.getElementById('particles');
+    for (let i=0;i<30;i++){ const p=document.createElement('i'); const z=2+(i%3); p.style.cssText=`left:${(i*41)%101}%;width:${z}px;height:${z}px;animation-delay:${(i%13)*-.72}s;animation-duration:${8+(i%7)}s`; particles.appendChild(p); }
+    const audio=document.getElementById('bgMusic'), gate=document.getElementById('gate'), enter=document.getElementById('enterBtn'), toggle=document.getElementById('musicToggle');
+    audio.volume=.2;
+    async function play(){ try{ audio.volume=.2; await audio.play(); toggle.classList.add('playing'); toggle.setAttribute('aria-pressed','true'); toggle.title='Выключить музыку'; }catch(e){ toggle.classList.remove('playing'); toggle.setAttribute('aria-pressed','false'); toggle.title='Включить музыку'; } }
+    enter.addEventListener('click',async()=>{ enter.disabled=true; await play(); gate.classList.add('leaving'); toggle.classList.add('show'); setTimeout(()=>{gate.remove();document.body.classList.remove('locked')},600); });
+    toggle.addEventListener('click',()=>{ if(audio.paused){play()}else{audio.pause();toggle.classList.remove('playing');toggle.setAttribute('aria-pressed','false');toggle.title='Включить музыку'} });
+    const cursor=document.getElementById('cursor');
+    if(matchMedia('(pointer:fine)').matches){ let mx=-30,my=-30,tx=-30,ty=-30; document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.classList.add('visible')}); document.addEventListener('mouseleave',()=>cursor.classList.remove('visible')); (function loop(){tx+=(mx-tx)*.14;ty+=(my-ty)*.14;cursor.style.transform=`translate3d(${tx-13}px,${ty-13}px,0)`;requestAnimationFrame(loop)})(); }
+  </script>
+</body>
+</html>
