@@ -66,6 +66,11 @@
     @keyframes section-in { to { opacity:1; transform:translateY(0); } }
     @media (max-width:768px) { .wrap { width:calc(100% - 28px); grid-template-columns:1fr; padding:22px 0 70px; }.profile-card { position:relative; top:auto; padding:28px 20px; border-radius:18px; }.avatar-orbit { width:112px; height:112px; margin-bottom:16px; }.avatar-kanji{font-size:48px}.profile-card h1{font-size:23px}.section{padding:20px;border-radius:15px}.two{grid-template-columns:1fr}.item{padding:14px}.music-toggle{left:14px;bottom:14px;width:46px;height:46px}.moon-cursor{display:none}.moon-orbit{width:90vw;height:90vw;right:-30vw;top:-15vw}.night-scene__image{background-position:67% center}.night-scene__shade{background:linear-gradient(0deg,rgba(5,10,19,.87),rgba(5,10,19,.43) 68%),linear-gradient(90deg,rgba(5,10,19,.78),rgba(5,10,19,.22))}.katana-label{right:13px;bottom:65px;font-size:7px}.entry-gate h1{font-size:26px}.gate-question{font-size:16px} }
     @media (prefers-reduced-motion:reduce) { *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.stars,.particles{display:none!important} }
+    /* Make the katana scene a clearly visible part of the first screen. */
+    .night-scene__image { filter:saturate(.9) contrast(1.06) brightness(.98); }
+    .night-scene__shade { background:linear-gradient(90deg,rgba(5,10,19,.78) 0%,rgba(5,10,19,.5) 38%,rgba(5,10,19,.06) 78%),linear-gradient(0deg,rgba(5,10,19,.58),transparent 64%); }
+    .entry-gate { background:linear-gradient(90deg,rgba(5,10,19,.72),rgba(5,10,19,.32) 74%),radial-gradient(circle at 53% 38%,rgba(88,158,227,.2),rgba(5,10,19,.46) 72%); }
+    @media (max-width:768px) { .entry-gate { background:linear-gradient(0deg,rgba(5,10,19,.72),rgba(5,10,19,.26) 78%),linear-gradient(90deg,rgba(5,10,19,.6),rgba(5,10,19,.08)); } }
   </style>
 </head>
 <body class="locked">
