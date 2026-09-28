@@ -1,0 +1,15 @@
+HAWKUY — Asset Credits
+
+Preserved
+- Original HTML, page structure, cards, typography, animation logic and visual style.
+- CSS is unchanged except for selecting the dedicated mobile background below 640px.
+
+New visual assets
+- assets/img/bg.jpg — original desktop anime illustration created for this site.
+- assets/img/bg-mobile.jpg — original mobile anime illustration created for this site.
+
+Music
+- “UJIO” by James Gargette (cinameng)
+- Source: https://opengameart.org/content/ujio
+- License: CC0 1.0 / Public Domain
+- https://creativecommons.org/publicdomain/zero/1.0/
