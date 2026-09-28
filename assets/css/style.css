@@ -131,10 +131,12 @@ h2{border-image:linear-gradient(#ff4fa3,#7a6bff) 1}
 @media(max-width:640px){.moon-big{left:52%;top:9%;width:46vw}.layer{height:78%}.hawk{width:32px}}
 
 /* ===== IMAGE-BASED SCENE (overrides) ===== */
-body{background:#050a13 url(../img/anime-girls-desktop.jpg?v=2) center/cover fixed no-repeat}
+body{background:#050a13}
+.anime-bg{position:absolute;inset:0;display:block}
+.anime-bg img{display:block;width:100%;height:100%;object-fit:cover;object-position:center}
 .moon-big{position:absolute;left:58%;top:0;width:min(46vw,520px);height:auto;background:none;border-radius:0;box-shadow:none;animation:moonf 8s ease-in-out infinite}
 @keyframes moonf{50%{filter:brightness(1.18)}}
 .layer{object-fit:cover;object-position:bottom;left:-4%;bottom:0;width:108%;height:100%}
 .fog{background:none;height:auto;width:200%;left:-50%;object-fit:fill;opacity:.9}
 .hawk{width:70px;height:auto;filter:drop-shadow(0 0 8px #9fb4d4)}
-@media(max-width:640px){body{background-image:url(../img/bg-mobile.jpg);background-position:center top}.moon-big{left:40%;width:70vw}.hawk{width:46px}}
+@media(max-width:640px){.anime-bg img{object-position:center top}.moon-big{left:40%;width:70vw}.hawk{width:46px}}
