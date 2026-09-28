@@ -4,9 +4,9 @@ Preserved
 - Original page structure, cards, typography and animation logic.
 
 Current visual assets
-- assets/img/anime-scene-desktop-v2.jpg — original seamless desktop anime scene created for this site.
-- assets/img/anime-scene-mobile-v2.jpg — original seamless mobile anime scene created for this site.
-- No legacy moon, mountain or fog overlay assets are used.
+- assets/img/anime-scene-desktop-v3.jpg — original dark desktop anime scene.
+- assets/img/anime-scene-mobile-v3.jpg — matching mobile scene with the center stripe removed.
+- No legacy moon, mountain-layer or fog-overlay assets are used.
 
 Music
 - “UJIO” by James Gargette (cinameng)
